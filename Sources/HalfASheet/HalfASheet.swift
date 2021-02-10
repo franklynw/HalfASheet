@@ -14,7 +14,7 @@ public struct HalfASheet<Content: View>: View {
     @State private var hasAppeared = false
     @State private var dragOffset: CGFloat = 0
     
-    internal var heightProportion: CGFloat = 0.84
+    internal var height: HalfASheetHeight = .proportional(0.84) // about the same as a ColorPicker
     internal var contentInsets = EdgeInsets(top: 7, leading: 16, bottom: 12, trailing: 16)
     internal var backgroundColor: UIColor = .tertiarySystemGroupedBackground
     internal var closeButtonColor: UIColor = .gray
@@ -75,16 +75,15 @@ public struct HalfASheet<Content: View>: View {
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .foregroundColor(Color(backgroundColor))
                             
-                            VStack {
-                                titleView
-                                content()
-                                    .padding(actualContentInsets)
-                            }
+                            content()
+                                .padding(actualContentInsets)
+                            
+                            titleView
                         }
-                        .frame(height: geometry.size.height * heightProportion + cornerRadius + additionalOffset)
+                        .frame(height: height.value(with: geometry) + cornerRadius + additionalOffset)
                         .offset(y: cornerRadius + additionalOffset + dragOffset)
                     }
-                    .transition(.verticalSlide(geometry.size.height * heightProportion))
+                    .transition(.verticalSlide(height.value(with: geometry)))
                     .highPriorityGesture(
                         dragGesture(geometry)
                     )
@@ -105,24 +104,34 @@ extension HalfASheet {
         
         let titleView = IfLet(title) { title in
             
-            HStack {
-                Image(systemName: "xmark.circle.fill")
-                    .font(Font.title.weight(.semibold))
-                    .opacity(0)
-                    .padding(EdgeInsets(top: 10, leading: 13, bottom: 0, trailing: 0))
+            VStack {
+                HStack {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(Font.title.weight(.semibold))
+                        .opacity(0)
+                        .padding(EdgeInsets(top: 10, leading: 13, bottom: 0, trailing: 0))
+                    Spacer()
+                    Text(title)
+                        .font(Font.headline.weight(.semibold))
+                        .padding(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
+                        .lineLimit(1)
+                    Spacer()
+                    closeButton
+                        .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                }
                 Spacer()
-                Text(title)
-                    .font(Font.headline.weight(.semibold))
-                    .padding(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
-                    .lineLimit(1)
-                Spacer()
-                closeButton
-                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
             }
+            
         } else: {
-            Spacer()
-            closeButton
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    closeButton
+                        .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                }
+                Spacer()
+            }
         }
         
         return titleView
@@ -151,7 +160,8 @@ extension HalfASheet {
                     return
                 }
                 
-                if dragOffset < geometry.size.height * heightProportion / 2 {
+                let validDragDistance = height.value(with: geometry) / 2
+                if dragOffset < validDragDistance {
                     withAnimation {
                         dragOffset = 0
                     }
@@ -186,6 +196,21 @@ extension HalfASheet {
         withAnimation {
             hasAppeared = false
             isPresented = false
+        }
+    }
+}
+
+
+public enum HalfASheetHeight {
+    case fixed(CGFloat)
+    case proportional(CGFloat)
+    
+    func value(with geometry: GeometryProxy) -> CGFloat {
+        switch self {
+        case .fixed(let height):
+            return height
+        case .proportional(let proportion):
+            return geometry.size.height * proportion
         }
     }
 }

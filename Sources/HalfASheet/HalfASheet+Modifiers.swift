@@ -11,10 +11,10 @@ import SwiftUI
 extension HalfASheet {
     
     /// The proportion of the containing view's height to use for the height of the HalfASheet
-    /// - Parameter heightProportion: the proportion value - 1 is 100% of the height
-    public func heightProportion(_ heightProportion: CGFloat) -> Self {
+    /// - Parameter height: a HalfASheetHeight case - either .fixed(required height in pixels) or .proportional(proportion of the containing view's height - 1 is 100% of the height)
+    public func height(_ height: HalfASheetHeight) -> Self {
         var copy = self
-        copy.heightProportion = heightProportion
+        copy.height = height
         return copy
     }
     

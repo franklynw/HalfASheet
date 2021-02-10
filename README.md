@@ -46,13 +46,22 @@ var body: some View {
 ```
 
 
-### Set the height of the sheet as a proportion of the containing view's height
+### Set the height of the sheet as either a fixed height or as a proportion of the containing view's height
 
 ```swift
 HalfASheet(isPresented: $isPresented, title: "Half a sheet") {
     // your view here
 }
-.heightProportion(0.6)
+.height(.fixed(400))
+```
+
+or
+
+```swift
+HalfASheet(isPresented: $isPresented, title: "Half a sheet") {
+    // your view here
+}
+.height(.proportional(0.6))
 ```
 
 ### Set the contentInsets of the view shown on the sheet
