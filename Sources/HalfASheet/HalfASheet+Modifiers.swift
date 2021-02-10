@@ -73,6 +73,9 @@ struct HalfASheetPresentationModifier<SheetContent>: ViewModifier where SheetCon
     }
     
     func body(content: Content) -> some View {
-        self.content()
+        ZStack {
+            content
+            self.content()
+        }
     }
 }
