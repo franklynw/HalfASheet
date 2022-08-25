@@ -119,7 +119,7 @@ extension HalfASheet {
                         .padding(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
                         .lineLimit(1)
                     Spacer()
-                    if (hideCloseButton != nil && hideCloseButton!) {
+                    if (hideCloseButton != nil && hideCloseButton == false) {
                         closeButton
                             .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
                     }
@@ -129,7 +129,7 @@ extension HalfASheet {
             
         } else: {
             //MARK: Hide close button
-            if (hideCloseButton != nil && hideCloseButton!) {
+            if (hideCloseButton != nil && hideCloseButton == false) {
             VStack {
                 HStack {
                     Spacer()
