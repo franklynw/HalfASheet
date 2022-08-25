@@ -35,7 +35,7 @@ public struct HalfASheet<Content: View>: View {
     public init(isPresented: Binding<Bool>, title: String? = nil, hideCloseButton: Bool? = nil, @ViewBuilder content: @escaping () -> Content) {
         _isPresented = isPresented
         self.title = title
-        self.hideCloseButton = hideButton
+        self.hideCloseButton = hideCloseButton
         self.content = content
     }
     
