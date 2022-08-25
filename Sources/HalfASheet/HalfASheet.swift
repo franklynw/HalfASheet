@@ -21,6 +21,8 @@ public struct HalfASheet<Content: View>: View {
     internal var allowsDraggingToDismiss = true
     
     private let title: String?
+    private let hideCloseButton: Bool?
+
     private let content: () -> Content
     private let cornerRadius: CGFloat = 15
     private let additionalOffset: CGFloat = 44 // this is so we can drag the sheet up a bit
@@ -30,9 +32,10 @@ public struct HalfASheet<Content: View>: View {
     }
     
     
-    public init(isPresented: Binding<Bool>, title: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    public init(isPresented: Binding<Bool>, title: String? = nil, hideCloseButton: Bool? = nil, @ViewBuilder content: @escaping () -> Content) {
         _isPresented = isPresented
         self.title = title
+        self.hideCloseButton = hideCloseButton
         self.content = content
     }
     
@@ -116,14 +119,17 @@ extension HalfASheet {
                         .padding(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
                         .lineLimit(1)
                     Spacer()
-                    closeButton
-                        .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                    if (hideCloseButton != nil && hideCloseButton == false) {
+                        closeButton
+                            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                    }
                 }
-                Spacer()
+              //  Spacer()
             }
             
         } else: {
-            
+            //MARK: Hide close button
+            if (hideCloseButton != nil && hideCloseButton == false) {
             VStack {
                 HStack {
                     Spacer()
@@ -131,6 +137,7 @@ extension HalfASheet {
                         .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
                 }
                 Spacer()
+            }
             }
         }
         
