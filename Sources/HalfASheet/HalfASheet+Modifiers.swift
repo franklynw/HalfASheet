@@ -28,9 +28,10 @@ extension HalfASheet {
     
     /// The background colour for the HalfASheet
     /// - Parameter backgroundColor: a UIColor
-    public func backgroundColor(_ backgroundColor: UIColor) -> Self {
+    public func colors(_ startColor: Color, _ endColor: Color) -> Self {
         var copy = self
-        copy.backgroundColor = backgroundColor
+        copy.startColor = startColor
+        copy.endColor = endColor
         return copy
     }
     

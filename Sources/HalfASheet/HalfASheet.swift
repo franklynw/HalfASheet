@@ -13,10 +13,12 @@ public struct HalfASheet<Content: View>: View {
     @Binding private var isPresented: Bool
     @State private var hasAppeared = false
     @State private var dragOffset: CGFloat = 0
+    @State var startColor: Color
+    @State var endColor: Color
     
     internal var height: HalfASheetHeight = .proportional(0.84) // about the same as a ColorPicker
     internal var contentInsets = EdgeInsets(top: 7, leading: 16, bottom: 12, trailing: 16)
-    internal var backgroundColor: UIColor = .tertiarySystemGroupedBackground
+    //internal var backgroundColor: UIColor = .tertiarySystemGroupedBackground
     internal var closeButtonColor: UIColor = .gray
     internal var allowsDraggingToDismiss = true
     
@@ -73,7 +75,7 @@ public struct HalfASheet<Content: View>: View {
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .foregroundColor(.white)
                             RoundedRectangle(cornerRadius: cornerRadius)
-                                .foregroundColor(Color(backgroundColor))
+                                                            .fill(LinearGradient(gradient: Gradient(colors: [startColor, endColor]), startPoint: .top, endPoint: .bottom))
                             
                             content()
                                 .padding(actualContentInsets)
