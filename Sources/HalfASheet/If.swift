@@ -7,6 +7,7 @@
 import SwiftUI
 
 
+@available(macOS 10.15, *)
 struct If: View {
     
     private let viewProvider: () -> AnyView
@@ -42,6 +43,7 @@ struct If: View {
 }
 
 
+@available(macOS 10.15, *)
 struct IfLet: View {
     
     private let viewProvider: () -> AnyView

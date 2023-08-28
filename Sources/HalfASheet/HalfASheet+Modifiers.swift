@@ -8,6 +8,7 @@
 import SwiftUI
 
 
+@available(macOS 10.15, *)
 extension HalfASheet {
     
     /// The proportion of the containing view's height to use for the height of the HalfASheet
@@ -26,18 +27,9 @@ extension HalfASheet {
         return copy
     }
     
-    /// The background colour for the HalfASheet
-    /// - Parameter backgroundColor: a UIColor
-    public func colors(_ startColor: Color, _ endColor: Color) -> Self {
-        var copy = self
-        copy.startColor = startColor
-        copy.endColor = endColor
-        return copy
-    }
-    
     /// The color for the close button
-    /// - Parameter closeButtonColor: a UIColor
-    public func closeButtonColor(_ closeButtonColor: UIColor) -> Self {
+    /// - Parameter closeButtonColor: a Color
+    public func closeButtonColor(_ closeButtonColor: Color) -> Self {
         var copy = self
         copy.closeButtonColor = closeButtonColor
         return copy
@@ -52,19 +44,19 @@ extension HalfASheet {
 }
 
 
+@available(macOS 10.15, *)
 extension View {
-    
     /// View extension in the style of .sheet - offers no real customisation. If more flexibility is required, use HalfASheet(...) directly, and apply the required modifiers
     /// - Parameters:
     ///   - isPresented: binding to a Bool which controls whether or not to show the partial sheet
     ///   - title: an optional title for the sheet
     ///   - content: the sheet's content
     public func halfASheet<T: View>(isPresented: Binding<Bool>, title: String? = nil, @ViewBuilder content: @escaping () -> T) -> some View {
-        modifier(HalfASheetPresentationModifier(content: { HalfASheet(isPresented: isPresented, title: title, content: content) }))
+        modifier(HalfASheetPresentationModifier(content: { HalfASheet(isPresented: isPresented, title: title, startCol: Color.gray, endCol: Color.black, content: content) }))
     }
 }
-
-
+@available(macOS 10.15.0, *)
+@available(macOS 10.15, *)
 struct HalfASheetPresentationModifier<SheetContent>: ViewModifier where SheetContent: View {
     
     var content: () -> HalfASheet<SheetContent>

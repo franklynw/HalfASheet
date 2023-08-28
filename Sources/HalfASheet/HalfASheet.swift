@@ -8,37 +8,41 @@ import SwiftUI
 import Combine
 
 
+@available(macOS 10.15, *)
 public struct HalfASheet<Content: View>: View {
     
     @Binding private var isPresented: Bool
     @State private var hasAppeared = false
     @State private var dragOffset: CGFloat = 0
-    @State var startColor: Color
-    @State var endColor: Color
     
     internal var height: HalfASheetHeight = .proportional(0.84) // about the same as a ColorPicker
     internal var contentInsets = EdgeInsets(top: 7, leading: 16, bottom: 12, trailing: 16)
     //internal var backgroundColor: UIColor = .tertiarySystemGroupedBackground
-    internal var closeButtonColor: UIColor = .gray
+    internal var closeButtonColor: Color = .gray
     internal var allowsDraggingToDismiss = true
     
     private let title: String?
     private let content: () -> Content
-    private let cornerRadius: CGFloat = 15
+    private let cornerRadius: CGFloat = 24
     private let additionalOffset: CGFloat = 44 // this is so we can drag the sheet up a bit
+    private var startColor: Color = Color.black
+    private var endColor: Color = Color("878787")
     
     private var actualContentInsets: EdgeInsets {
         return EdgeInsets(top: contentInsets.top, leading: contentInsets.leading, bottom: cornerRadius + additionalOffset + contentInsets.bottom, trailing: contentInsets.trailing)
     }
     
     
-    public init(isPresented: Binding<Bool>, title: String? = nil, @ViewBuilder content: @escaping () -> Content) {
+    public init(isPresented: Binding<Bool>, title: String? = nil, startCol: Color, endCol: Color, @ViewBuilder content: @escaping () -> Content) {
         _isPresented = isPresented
         self.title = title
         self.content = content
+        self.startColor = startCol
+        self.endColor = endCol
     }
     
     
+    @available(macOS 11.0, *)
     public var body: some View {
         
         GeometryReader { geometry in
@@ -80,7 +84,7 @@ public struct HalfASheet<Content: View>: View {
                             content()
                                 .padding(actualContentInsets)
                             
-                            titleView
+                            //titleView
                         }
                         .frame(height: height.value(with: geometry) + cornerRadius + additionalOffset)
                         .offset(y: cornerRadius + additionalOffset + dragOffset)
@@ -94,19 +98,23 @@ public struct HalfASheet<Content: View>: View {
                     }
                 }
             }
+
         }
     }
 }
 
 
 // MARK: - Private
+@available(macOS 10.15, *)
 extension HalfASheet {
-    
+    /*
+    @available(macOS 11.0, *)
     private var titleView: IfLet {
-        
+
         let titleView = IfLet(title) { title in
-            
+
             VStack {
+
                 HStack {
                     Image(systemName: "xmark.circle.fill")
                         .font(Font.title.weight(.semibold))
@@ -121,16 +129,17 @@ extension HalfASheet {
                     closeButton
                         .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
                 }
+   
                 Spacer()
             }
+
             
         } else: {
             
             VStack {
                 HStack {
                     Spacer()
-                    closeButton
-                        .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
+                    //closeButton.padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 13))
                 }
                 Spacer()
             }
@@ -138,6 +147,7 @@ extension HalfASheet {
         
         return titleView
     }
+     */
     
     private func dragGesture(_ geometry: GeometryProxy) -> _EndedGesture<_ChangedGesture<DragGesture>> {
         
@@ -175,6 +185,7 @@ extension HalfASheet {
         return gesture
     }
     
+    @available(macOS 11.0, *)
     private var closeButton: AnyView {
         
         let button = Button {
@@ -183,10 +194,10 @@ extension HalfASheet {
             ZStack {
                 Image(systemName: "xmark.circle.fill")
                     .font(Font.title.weight(.semibold))
-                    .accentColor(Color(UIColor.lightGray.withAlphaComponent(0.2)))
+                    .accentColor(Color.gray)
                 Image(systemName: "xmark.circle.fill")
                     .font(Font.title.weight(.semibold))
-                    .accentColor(Color(closeButtonColor))
+                    .accentColor(closeButtonColor)
             }
         }
         
@@ -203,6 +214,7 @@ extension HalfASheet {
 }
 
 
+@available(macOS 10.15, *)
 public enum HalfASheetHeight {
     case fixed(CGFloat)
     case proportional(CGFloat)

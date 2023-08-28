@@ -12,6 +12,7 @@ fileprivate struct VerticalSlideModifier: ViewModifier {
     
     let offset: CGFloat
     
+    @available(macOS 10.15.0, *)
     func body(content: Content) -> some View {
         
         content
@@ -20,6 +21,7 @@ fileprivate struct VerticalSlideModifier: ViewModifier {
 }
 
 
+@available(macOS 10.15, *)
 extension AnyTransition {
     
     static func verticalSlide(_ offset: CGFloat? = nil) -> AnyTransition {
